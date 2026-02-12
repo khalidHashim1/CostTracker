@@ -2,11 +2,13 @@
 
 A serverless AWS cost monitoring tool that converts raw AWS billing data into a clear, categorized, and easy-to-read dashboard.
 
+## 🌐 Live Site
+
+https://cost.khalidhashim.com
+
 ## Overview
 
-This project uses AWS Lambda and the AWS Cost Explorer API to automatically retrieve, process, and categorize AWS cost data. The processed data is then published as structured JSON to an S3 bucket configured for static hosting and served via a custom subdomain:
-
-cost.khalidhashim.com
+This project uses AWS Lambda and the AWS Cost Explorer API to automatically retrieve, process, and categorize AWS cost data. The processed data is then published as structured JSON to an S3 bucket configured for static hosting and served via a custom subdomain.
 
 The goal of this project is to simplify complex AWS billing data into meaningful business categories such as Compute, Database, Storage, Network, and Support.
 
@@ -31,7 +33,7 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 - Fully serverless architecture
 - Automated daily cost aggregation
 - Custom service-to-category mapping
-- Real-time dashboard updates
+- Near real-time dashboard updates
 - Public access via custom domain
 - No servers to manage
 
@@ -45,4 +47,4 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 
 ---
 
-This project demonstrates practical experience with AWS serverless architecture, cost optimization visibility, IAM configuration, and cloud-native data processing.
+This project demonstrates practical experience with AWS serverless architecture, cost visibility optimization, IAM configuration, and cloud-native data processing.
