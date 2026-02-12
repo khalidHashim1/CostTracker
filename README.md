@@ -16,6 +16,7 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 
 - AWS Lambda – Fetches and processes cost data
 - AWS Cost Explorer API – Provides daily unblended cost metrics
+- EventBridge (CloudWatch Events) – Schedules Lambda to run automatically every day
 - Amazon S3 (Static Hosting) – Stores and serves dashboard data
 - Custom Domain/Subdomain – Public dashboard endpoint
 
@@ -27,11 +28,12 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 4. Daily totals and category breakdowns are calculated.
 5. A structured JSON file is generated.
 6. The JSON file is uploaded to S3 for dashboard visualization.
+7. EventBridge triggers the Lambda function automatically on a daily schedule.
 
 ## Key Features
 
 - Fully serverless architecture
-- Automated daily cost aggregation
+- Automated daily cost aggregation via EventBridge
 - Custom service-to-category mapping
 - Near real-time dashboard updates
 - Public access via custom domain
@@ -42,9 +44,10 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 - Python (boto3)
 - AWS Lambda
 - AWS Cost Explorer API
+- EventBridge (CloudWatch Events)
 - Amazon S3
 - IAM Roles & Policies
 
 ---
 
-This project demonstrates practical experience with AWS serverless architecture, cost visibility optimization, IAM configuration, and cloud-native data processing.
+This project demonstrates practical experience with AWS serverless architecture, cost visibility optimization, IAM configuration, EventBridge scheduling, and cloud-native data processing.
