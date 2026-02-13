@@ -28,12 +28,12 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 4. Daily totals and category breakdowns are calculated.
 5. A structured JSON file is generated.
 6. The JSON file is uploaded to S3 for dashboard visualization.
-7. EventBridge triggers the Lambda function automatically on a daily schedule.
+7. EventBridge triggers the Lambda function automatically on a weekly schedule.
 
 ## Key Features
 
 - Fully serverless architecture
-- Automated daily cost aggregation via EventBridge
+- Automated weekly cost aggregation via EventBridge
 - Custom service-to-category mapping
 - Near real-time dashboard updates
 - Public access via custom domain
