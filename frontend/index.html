@@ -79,15 +79,15 @@
         <div class="cards">
             <div class="card">
                 <h3>Total This Week</h3>
-                <p id="total-week">$0</p>
+                <p id="total-week">$0.00</p> <!-- Default value -->
             </div>
             <div class="card">
                 <h3>Categories</h3>
-                <p id="categories-count">0</p>
+                <p id="categories-count">0</p> <!-- Default value -->
             </div>
             <div class="card">
                 <h3>Change vs Last Week </h3>
-                <p id="change-week">0%</p>
+                <p id="change-week">0%</p> <!-- Default value -->
             </div>
         </div>
 
@@ -105,76 +105,125 @@
     </div>
 
     <script>
-fetch("aws_cost_dashboard.json?ts=" + Date.now())
-  .then(res => res.json())
-  .then(data => {
-    if (!data || data.length === 0) return;
+    // Set default data for the charts until real data is fetched
+    const defaultWeeklyTrendData = [0, 0]; // Default values for last week and this week
+    const defaultCategoryData = {
+        "Category A": 0,
+        "Category B": 0,
+        "Category C": 0
+    };
 
-    // Use the last day as "this week" and first day as "last week"
-    const latestDay = data[data.length - 1];
-    const firstDay = data[0];
+    // Initialize the summary values with defaults
+    document.getElementById('total-week').textContent = "$0.00";
+    document.getElementById('categories-count').textContent = "0";
+    document.getElementById('change-week').textContent = "0%";
 
-    const categorySpendings = latestDay.categories;
-    const thisWeekTotal = latestDay.total;
-    const lastWeekTotal = firstDay.total;
-
-    // Update summary cards
-    document.getElementById('total-week').textContent = `$${thisWeekTotal.toFixed(2)}`;
-    document.getElementById('categories-count').textContent = Object.keys(categorySpendings).length;
-    const changePercent = lastWeekTotal === 0 
-      ? "0%" 
-      : (((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100).toFixed(1) + "%";
-    document.getElementById('change-week').textContent = changePercent;
-
-    // Prepare category chart
-    const labels = Object.keys(categorySpendings);
-    const values = Object.values(categorySpendings);
-
+    // Prepare default category chart
     const ctxCategory = document.getElementById('categoryChart').getContext('2d');
     new Chart(ctxCategory, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Spendings ($)',
-          data: values,
-          backgroundColor: 'rgba(52, 152, 219, 0.7)',
-          borderColor: 'rgba(52, 152, 219, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        type: 'bar',
+        data: {
+            labels: Object.keys(defaultCategoryData),
+            datasets: [{
+                label: 'Spendings ($)',
+                data: Object.values(defaultCategoryData),
+                backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                borderColor: 'rgba(52, 152, 219, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
     });
 
-    // Prepare weekly trend chart
-    const weeklyTrendLabels = [firstDay.date, latestDay.date];
-    const weeklyTrendData = [lastWeekTotal, thisWeekTotal];
-
+    // Prepare default weekly trend chart
     const ctxTrend = document.getElementById('weeklyTrendChart').getContext('2d');
     new Chart(ctxTrend, {
-      type: 'line',
-      data: {
-        labels: weeklyTrendLabels,
-        datasets: [{
-          label: 'Weekly Spendings ($)',
-          data: weeklyTrendData,
-          backgroundColor: 'rgba(46, 204, 113, 0.3)',
-          borderColor: 'rgba(46, 204, 113, 1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.3,
-          pointRadius: 5
-        }]
-      },
-      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        type: 'line',
+        data: {
+            labels: ['Last Week', 'This Week'],
+            datasets: [{
+                label: 'Weekly Spendings ($)',
+                data: defaultWeeklyTrendData,
+                backgroundColor: 'rgba(46, 204, 113, 0.3)',
+                borderColor: 'rgba(46, 204, 113, 1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
     });
 
-  })
-  .catch(err => {
-    console.error("Failed to load AWS JSON:", err);
-  });
-</script>
+    // Fetch real data
+    fetch("aws_cost_dashboard.json?ts=" + Date.now())
+      .then(res => res.json())
+      .then(data => {
+        if (!data || data.length === 0) return;
 
+        // Use the last day as "this week" and first day as "last week"
+        const latestDay = data[data.length - 1];
+        const firstDay = data[0];
 
+        const categorySpendings = latestDay.categories;
+        const thisWeekTotal = latestDay.total;
+        const lastWeekTotal = firstDay.total;
+
+        // Update summary cards
+        document.getElementById('total-week').textContent = `$${thisWeekTotal.toFixed(2)}`;
+        document.getElementById('categories-count').textContent = Object.keys(categorySpendings).length;
+        const changePercent = lastWeekTotal === 0 
+          ? "0%" 
+          : (((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100).toFixed(1) + "%";
+        document.getElementById('change-week').textContent = changePercent;
+
+        // Prepare category chart
+        const labels = Object.keys(categorySpendings);
+        const values = Object.values(categorySpendings);
+
+        const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctxCategory, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Spendings ($)',
+              data: values,
+              backgroundColor: 'rgba(52, 152, 219, 0.7)',
+              borderColor: 'rgba(52, 152, 219, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Prepare weekly trend chart
+        const weeklyTrendLabels = [firstDay.date, latestDay.date];
+        const weeklyTrendData = [lastWeekTotal, thisWeekTotal];
+
+        const ctxTrend = document.getElementById('weeklyTrendChart').getContext('2d');
+        new Chart(ctxTrend, {
+          type: 'line',
+          data: {
+            labels: weeklyTrendLabels,
+            datasets: [{
+              label: 'Weekly Spendings ($)',
+              data: weeklyTrendData,
+              backgroundColor: 'rgba(46, 204, 113, 0.3)',
+              borderColor: 'rgba(46, 204, 113, 1)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5
+            }]
+          },
+          options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+      })
+      .catch(err => {
+        console.error("Failed to load AWS JSON:", err);
+      });
+    </script>
 </body>
 </html>
