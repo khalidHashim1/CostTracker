@@ -6,12 +6,22 @@ S3_BUCKET = "cost.khalidhashim.com"
 S3_KEY = "aws_cost_dashboard.json"
 
 SERVICE_MAPPING = {
-    "Amazon S3": "File Storage",
     "Amazon EC2": "Compute",
     "AWS Lambda": "Compute",
+    "Amazon ECS": "Compute",
+
+    "Amazon S3": "Storage",
+    "Amazon EBS": "Storage",
+    "Amazon EFS": "Storage",
+
     "Amazon RDS": "Database",
     "Amazon DynamoDB": "Database",
+    "Amazon Aurora": "Database",
+
     "Amazon CloudFront": "Network",
+    "Elastic Load Balancing": "Network",
+    "Data Transfer": "Network",
+
     "AWS Support": "Support"
 }
 
