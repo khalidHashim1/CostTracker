@@ -1,40 +1,34 @@
-                    ┌──────────────────────────────┐
-                    │        Event Schedule        │
-                    │   (Weekly Cron Trigger)      │
-                    └──────────────┬───────────────┘
-                                   │
-                                   ▼
-                   ┌──────────────────────────┐
-                   │       EventBridge        │
-                   │  (CloudWatch Events)     │
-                   └──────────────┬───────────┘
-                                  │ Triggers
-                                  ▼
-                        ┌─────────────────┐
-                        │   AWS Lambda    │
-                        │ Cost Processor  │
-                        └────────┬────────┘
-                                 │
-                 ┌───────────────┼────────────────┐
-                 ▼                               ▼
-    ┌────────────────────────┐        ┌─────────────────────┐
-    │ AWS Cost Explorer API  │        │  Service Categorizer │
-    │  (GetCostAndUsage)     │        │  (Business Mapping)  │
-    └────────────────────────┘        └─────────────────────┘
-                                 │
-                                 ▼
-                        ┌─────────────────┐
-                        │ JSON Generator  │
-                        └────────┬────────┘
-                                 │ Upload
-                                 ▼
-                        ┌─────────────────┐
-                        │   Amazon S3     │
-                        │ (Static Hosting)│
-                        └────────┬────────┘
-                                 │
-                                 ▼
-                   ┌──────────────────────────┐
-                   │  cost.khalidhashim.com   │
-                   │   (Custom Subdomain)     │
-                   └──────────────────────────┘
+             ┌─────────────────────┐
+             │     GitHub Repo     │
+             │  (Terraform + Code)│
+             └─────────┬──────────┘
+                       │ push
+                       ▼
+             ┌─────────────────────┐
+             │ GitHub Actions CI/CD│
+             │  Pipeline Executes  │
+             └─────────┬──────────┘
+                       │
+        ┌──────────────┼────────────────┐
+        │                              │
+        ▼                              ▼
+ ┌───────────────┐             ┌────────────────────┐
+ │ Terraform IaC │             │ Lambda Deployment │
+ │  (plan/apply) │             │  Code Updates     │
+ └───────┬───────┘             └─────────┬─────────┘
+         │                                 │
+         ▼                                 ▼
+ ┌─────────────────────┐           ┌───────────────────┐
+ │ AWS Resources       │           │ S3 Bucket (JSON   │
+ │ - Lambda Function   │           │ Dashboard Files)  │
+ │ - EventBridge Rule  │           └─────────┬─────────┘
+ │ - S3 Buckets        │                     │
+ │ - CloudFront        │                     ▼
+ │ - Route 53 / ACM    │           ┌───────────────────┐
+ └─────────┬───────────┘           │ CloudFront CDN    │
+           │                       │ (HTTPS + Caching) │
+           ▼                       └─────────┬─────────┘
+   Remote Terraform State (S3 + DynamoDB)      │
+                                               ▼
+                                     🌐 Public Dashboard
+                                     https://cost.khalidhashim.com
