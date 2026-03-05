@@ -35,7 +35,7 @@ The goal of this project is to simplify complex AWS billing data into meaningful
 5. A structured JSON file is generated  
 6. The JSON file is uploaded to S3 for dashboard visualization  
 7. EventBridge triggers the Lambda function automatically on a weekly schedule  
-8. Terraform provisions all AWS resources automatically  
+8. Terraform provisions all AWS resources automatically, Terraform state is stored remotely in an S3 bucket
 9. GitHub Actions pipeline deploys updates to Lambda and S3 on push to the main branch
 
 ---
