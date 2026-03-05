@@ -1,34 +1,24 @@
-             ┌─────────────────────┐
-             │     GitHub Repo     │
-             │  (Terraform + Code)│
-             └─────────┬──────────┘
-                       │ push
-                       ▼
-             ┌─────────────────────┐
-             │ GitHub Actions CI/CD│
-             │  Pipeline Executes  │
-             └─────────┬──────────┘
-                       │
-        ┌──────────────┼────────────────┐
-        │                              │
-        ▼                              ▼
- ┌───────────────┐             ┌────────────────────┐
- │ Terraform IaC │             │ Lambda Deployment │
- │  (plan/apply) │             │  Code Updates     │
- └───────┬───────┘             └─────────┬─────────┘
-         │                                 │
-         ▼                                 ▼
- ┌─────────────────────┐           ┌───────────────────┐
- │ AWS Resources       │           │ S3 Bucket (JSON   │
- │ - Lambda Function   │           │ Dashboard Files)  │
- │ - EventBridge Rule  │           └─────────┬─────────┘
- │ - S3 Buckets        │                     │
- │ - CloudFront        │                     ▼
- │ - Route 53 / ACM    │           ┌───────────────────┐
- └─────────┬───────────┘           │ CloudFront CDN    │
-           │                       │ (HTTPS + Caching) │
-           ▼                       └─────────┬─────────┘
-   Remote Terraform State (S3 + DynamoDB)      │
-                                               ▼
-                                     🌐 Public Dashboard
-                                     https://cost.khalidhashim.com
+          ┌─────────────────────┐
+          │     GitHub Repo     │
+          │  (Lambda + S3 code)│
+          └─────────┬──────────┘
+                    │ push
+                    ▼
+          ┌─────────────────────┐
+          │ GitHub Actions CI/CD│
+          │ Deploys Lambda /   │
+          │ S3 Dashboard JSON  │
+          └─────────┬──────────┘
+                    │
+                    ▼
+          ┌─────────────────────┐
+          │ AWS Resources       │
+          │ - Lambda Function   │
+          │ - S3 Bucket         │
+          │ - EventBridge Rule  │
+          │ (created via Terraform) │
+          └─────────┬──────────┘
+                    │
+                    ▼
+          🌐 Public Dashboard
+          https://cost.khalidhashim.com
